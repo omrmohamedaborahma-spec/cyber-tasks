@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d18"><title>CYBER_TASKS | Front-End Journey</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="grid-bg"></div><div class="scanlines"></div>
+<header class="header"><div class="header-glitch" data-text="CYBER_TASKS">CYBER_TASKS</div><p class="header-sub">// FRONT-END JOURNEY • PERSONAL TASK MANAGER</p></header>
+<main class="app-container">
+  <section class="input-panel">
+    <div class="panel-title"><span class="bracket">[</span> <span id="formTitle">إضافة مهمة جديدة</span> <span class="bracket">]</span></div>
+    <div class="input-row"><input id="taskInput" class="cyber-input" type="text" maxlength="140" placeholder="اكتب اسم المهمة بشكل واضح..." autocomplete="off"></div>
+    <div class="extra-fields">
+      <label class="field"><span class="cyber-label">المرحلة التعليمية</span><select id="stageSelect" class="cyber-select"><option value="general">عام</option><option>HTML</option><option>CSS</option><option>JavaScript</option><option>Market Research</option><option>TypeScript</option><option>React</option><option>Next.js</option><option>Projects</option><option>Portfolio</option><option>Marketing & Sales</option></select></label>
+      <label class="field"><span class="cyber-label">نوع النشاط</span><select id="taskKind" class="cyber-select"><option value="learn">تعلم درس</option><option value="practice">تطبيق عملي</option><option value="challenge">تحدي</option><option value="review">مراجعة</option><option value="project">مشروع</option><option value="other">أخرى</option></select></label>
+      <label class="field"><span class="cyber-label">المدة المتوقعة (دقيقة)</span><input id="durationInput" class="cyber-input" type="number" min="0" max="1440" placeholder="مثال: 60"></label>
+      <label class="field"><span class="cyber-label">رابط الدرس / المصدر</span><input id="sourceInput" class="cyber-input" type="url" placeholder="https://..."></label>
+    </div>
+    <div class="input-row"><textarea id="detailsInput" class="cyber-input details-input" rows="2" maxlength="500" placeholder="تفاصيل المهمة أو المطلوب تسليمه (اختياري)..."></textarea></div>
+    <div class="controls-row">
+      <div class="select-wrapper"><label class="cyber-label" for="prioritySelect">الأولوية</label><select id="prioritySelect" class="cyber-select"><option value="high">🔴 عالية</option><option value="medium" selected>🟡 متوسطة</option><option value="low">🟢 منخفضة</option></select></div>
+      <div class="habit-toggle-wrapper"><label class="cyber-label">النوع</label><div class="toggle-group"><button type="button" class="toggle-btn active" id="typeTask" onclick="setType('task')">مهمة</button><button type="button" class="toggle-btn" id="typeHabit" onclick="setType('habit')">عادة</button></div></div>
+    </div>
+    <div class="schedule-box"><label class="cyber-label">نظام التكرار</label><div class="toggle-group schedule-mode"><button type="button" class="toggle-btn active" id="modeOnce" onclick="setScheduleMode('once')">مرة واحدة</button><button type="button" class="toggle-btn" id="modeWeekly" onclick="setScheduleMode('weekly')">أسبوعيًا</button></div>
+      <div id="onceOptions" class="date-option"><label class="cyber-label" for="dueDate">موعد التنفيذ</label><input type="date" id="dueDate" class="cyber-input"></div>
+      <div id="weeklyOptions" style="display:none"><div class="cyber-label days-heading">أيام التكرار</div><div class="days-picker" id="daysPicker">
+      <label class="day-option"><input type="checkbox" value="0"><span>الأحد</span></label><label class="day-option"><input type="checkbox" value="1"><span>الإثنين</span></label><label class="day-option"><input type="checkbox" value="2"><span>الثلاثاء</span></label><label class="day-option"><input type="checkbox" value="3"><span>الأربعاء</span></label><label class="day-option"><input type="checkbox" value="4"><span>الخميس</span></label><label class="day-option"><input type="checkbox" value="5"><span>الجمعة</span></label><label class="day-option"><input type="checkbox" value="6"><span>السبت</span></label></div></div>
+    </div>
+    <div class="btn-row"><button class="cyber-btn primary" id="saveTaskBtn" onclick="addTask()">＋ حفظ المهمة</button><button class="cyber-btn ai-btn" onclick="optimizeWithAI()">⚡ اقتراح ترتيب المهام</button><button class="cyber-btn cancel-edit" id="cancelEditBtn" onclick="cancelEdit()" style="display:none">إلغاء التعديل</button></div>
+  </section>
+
+  <section class="week-panel"><div class="panel-title"><span class="bracket">[</span> جدول الأسبوع <span class="bracket">]</span></div><div class="week-navigation"><button class="week-nav-btn" id="prevWeek">‹</button><strong id="weekLabel">هذا الأسبوع</strong><button class="week-nav-btn" id="nextWeek">›</button><button class="today-btn" id="goToday">اليوم</button></div><div class="week-days" id="weekDays"></div><div class="selected-day-heading"><div><div class="cyber-label">المهام المستحقة في</div><h2 id="selectedDateLabel">اليوم</h2></div><div class="day-progress"><span id="dayProgress">0 / 0</span><small>إنجاز اليوم</small></div></div></section>
+
+  <section class="stats-bar"><div class="stat-item"><span class="stat-value" id="totalCount">0</span><span class="stat-label">كل المهام</span></div><div class="stat-divider">|</div><div class="stat-item"><span class="stat-value" id="highCount">0</span><span class="stat-label">عالية</span></div><div class="stat-divider">|</div><div class="stat-item"><span class="stat-value" id="medCount">0</span><span class="stat-label">متوسطة</span></div><div class="stat-divider">|</div><div class="stat-item"><span class="stat-value" id="lowCount">0</span><span class="stat-label">منخفضة</span></div></section>
+  <section class="report-panel"><div class="panel-title"><span class="bracket">[</span> تقارير التقدم <span class="bracket">]</span></div><div class="report-controls"><label>من <input type="date" id="reportFrom" class="cyber-input"></label><label>إلى <input type="date" id="reportTo" class="cyber-input"></label><button class="cyber-btn primary" onclick="generateReport()">إنشاء التقرير</button></div><div id="reportOutput" class="report-output">حدد الفترة واضغط «إنشاء التقرير» لعرض ملخص إنجازك.</div></section>
+  <section class="backup-panel"><div class="panel-title"><span class="bracket">[</span> النسخ الاحتياطي والبيانات <span class="bracket">]</span></div><p class="backup-note">بياناتك محفوظة على هذا المتصفح فقط. استخدم التصدير للاحتفاظ بنسخة أو نقلها لجهاز آخر.</p><div class="btn-row"><button class="cyber-btn" onclick="exportData()">⬇ تصدير نسخة احتياطية</button><label class="cyber-btn import-label">⬆ استيراد نسخة<input type="file" id="importFile" accept="application/json,.json" hidden onchange="importData(event)"></label><button class="cyber-btn danger" onclick="clearAll()">مسح كل المهام</button></div></section>
+  <div class="filter-bar"><span class="filter-label">// تصفية:</span><button class="filter-btn active" data-filter="all" onclick="filterTasks('all',this)">الكل</button><button class="filter-btn" data-filter="high" onclick="filterTasks('high',this)">عالية</button><button class="filter-btn" data-filter="medium" onclick="filterTasks('medium',this)">متوسطة</button><button class="filter-btn" data-filter="low" onclick="filterTasks('low',this)">منخفضة</button><button class="filter-btn" data-filter="habit" onclick="filterTasks('habit',this)">عادات</button><select id="stageFilter" class="cyber-select" onchange="renderTasks()"><option value="all">كل المراحل</option><option>HTML</option><option>CSS</option><option>JavaScript</option><option>Market Research</option><option>TypeScript</option><option>React</option><option>Next.js</option><option>Projects</option><option>Portfolio</option><option>Marketing & Sales</option><option value="general">عام</option></select></div>
+  <section class="task-list" id="taskList"><div class="empty-state" id="emptyState"><div class="empty-icon">◈</div><p>لا توجد مهام لهذا اليوم<br><small>أضف مهمة أو اختار يومًا آخر</small></p></div></section>
+  <div class="ai-status-bar" id="aiStatusBar" style="display:none"><span id="aiStatusText"></span></div>
+</main><footer class="footer">// CYBER_TASKS © 2026 — Build your future, one task at a time</footer><script src="app.js"></script>
+</body></html>
